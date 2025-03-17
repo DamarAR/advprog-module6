@@ -10,8 +10,19 @@ By collecting these lines into a Vec<String>, I was able to obtain a structured,
 
 ## Commit 2 Reflection Notes
  
- ![alt text](assets/images/img_commit2.png)
+![alt text](assets/images/img_commit2.png)
  
 I learned how to serve an actual HTML file instead of just plain text by modifying the handle_connection method. Using fs::read_to_string(), I could easily load the contents of hello.html into memory. By including the appropriate headers along with the file’s content in the HTTP response, I ensured that browsers rendered the page correctly.
 
 Additionally, I discovered the significance of the Content-Length header—omitting it can lead to rendering issues in some browsers. I also gained a deeper understanding of the required structure of an HTTP response, which must follow a specific format: starting with a status line (e.g., HTTP/1.1 200 OK), followed by headers, a blank line, and then the response body.
+
+
+## Commit 3 Reflection Notes
+
+![alt text](assets/images/img_commit3.png)
+
+I modified the handle_connection method to return different responses based on the requested path. By analyzing the request line from the browser, the server determines which page to serve: if the request is for /, it responds with a 200 OK status and serves hello.html; for any other path (such as /bad), it returns a 404 NOT FOUND status along with a custom 404.html file.
+
+This implementation treats / as the only valid request path. If the request line matches GET / HTTP/1.1, the server delivers hello.html with a success status; otherwise, it responds with an error status and displays an error page.
+
+Moreover, the tutorial recommends refactoring the code to enhance clarity and maintainability. By organizing the logic into smaller, reusable components instead of a single function, the code becomes more readable and scalable for future improvements.
