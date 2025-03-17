@@ -33,3 +33,14 @@ Moreover, the tutorial recommends refactoring the code to enhance clarity and ma
 I created a /sleep route in the web server to simulate a performance bottleneck. When this route is accessed, the server delays its response by 10 seconds using thread::sleep(). This experiment demonstrated how a single-threaded server struggles under delays or heavy processing loads—if /sleep is accessed in one browser tab, other requests, even to the standard / route in another tab, are blocked until the delay ends.
 
 Through this, I realized that single-threaded architectures do not scale well. In real-world web servers, multithreading or asynchronous processing is crucial to ensure that slow or resource-intensive requests do not block others. This experiment provided valuable insight into the relationship between concurrency and performance in web server design.
+
+
+## Commit 5 Reflection Notes
+
+In this part of the project, we enhanced our server's performance by implementing a ThreadPool to handle multiple connections concurrently. Instead of spawning a new thread for each request, we initialized a fixed number of threads—four in this case—using ThreadPool::new(4). These threads remain active and are efficiently reused to process incoming tasks.
+
+Within the main loop, we assigned tasks (closures) to the thread pool using pool.execute(). This works similarly to Rust’s thread::spawn(), where a closure is executed, but instead of constantly creating new threads, we reuse existing worker threads, reducing the overhead of thread creation.
+
+For the thread count parameter in ThreadPool::new(), we used the usize type since it represents non-negative integers, making it ideal for defining the number of worker threads, which cannot be negative. Additionally, storing worker threads in a vector aligns well with usize.
+
+In the execute method, we specified the closure type as FnOnce(), indicating that each task runs exactly once. The empty parentheses after FnOnce signify that the closure takes no arguments and returns nothing, similar to a standard function without parameters.
