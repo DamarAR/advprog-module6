@@ -1,4 +1,4 @@
-# module 6
+# Module 6
  
 ## Commit 1 Reflection notes
 To handle incoming HTTP requests from a web browser, I wrapped the TCP stream with a BufReader, allowing me to read the stream line by line using .lines(). Each line represents a different component of the HTTP request, such as the method, path, or headers.
@@ -44,3 +44,12 @@ Within the main loop, we assigned tasks (closures) to the thread pool using pool
 For the thread count parameter in ThreadPool::new(), we used the usize type since it represents non-negative integers, making it ideal for defining the number of worker threads, which cannot be negative. Additionally, storing worker threads in a vector aligns well with usize.
 
 In the execute method, we specified the closure type as FnOnce(), indicating that each task runs exactly once. The empty parentheses after FnOnce signify that the closure takes no arguments and returns nothing, similar to a standard function without parameters.
+
+
+## Bonus Reflection Notes
+
+I created a build() function as a replacement for the new() function in the ThreadPool implementation. Both functions perform the same steps: creating a channel, wrapping it in a Mutex and Arc, and initializing worker threads. The main difference lies in the naming convention.
+
+Using build() can be advantageous when object creation involves a more complex setup or has the potential to evolve into a builder pattern. This naming approach is widely used in Rust libraries and frameworks. Although in this case, both new() and build() execute the same logic, build() can make the code more expressive and intuitive for developers.
+
+Ultimately, the difference between new() and build() is primarily about naming conventions—new() is idiomatic for simple object creation, while build() implies a more configurable or structured initialization process, often associated with the builder pattern.
